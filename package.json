@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -19,9 +20,20 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@angular-eslint/builder": "^19.7.1",
+    "@angular-eslint/eslint-plugin": "^19.7.1",
+    "@angular-eslint/eslint-plugin-template": "^19.7.1",
+    "@angular-eslint/template-parser": "^19.7.1",
     "@angular/build": "^20.0.1",
     "@angular/cli": "^20.0.1",
     "@angular/compiler-cli": "^20.0.0",
-    "typescript": "~5.8.2"
+    "@eslint/js": "^9.28.0",
+    "angular-eslint": "19.7.1",
+    "eslint": "^9.28.0",
+    "prettier": "^3.5.3",
+    "stylelint": "^16.20.0",
+    "stylelint-config-standard": "^38.0.0",
+    "typescript": "~5.8.2",
+    "typescript-eslint": "8.33.1"
   }
 }
