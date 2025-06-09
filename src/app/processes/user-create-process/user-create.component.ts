@@ -1,15 +1,19 @@
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from "@angular/core";
 import { StepComponent } from "../../../lib/process-engine/process.type";
 
 @Component({
   selector: "app-user-create",
   imports: [],
-  template: ``,
+  template: `User create step`,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserCreateComponent implements StepComponent<string, string> {
-  start(input: string, callback: (out: string) => void): void {
-    throw new Error("Method not implemented.");
-  }
+  public readonly input = input.required<string>();
+  public readonly output = output<string>();
 }
