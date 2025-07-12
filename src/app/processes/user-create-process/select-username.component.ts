@@ -5,6 +5,8 @@ import {
   output,
 } from "@angular/core";
 import { StepComponent } from "../../../lib/process-engine/process.type";
+import { outputFromObservable } from "@angular/core/rxjs-interop";
+import { of } from "rxjs";
 
 @Component({
   selector: "app-select-username",
@@ -23,4 +25,5 @@ export class SelectUsernameComponent
 {
   public readonly input = input.required<undefined>();
   public readonly output = output<string>();
+  public readonly valid = outputFromObservable(of(true));
 }

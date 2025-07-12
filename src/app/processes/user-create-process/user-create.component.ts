@@ -3,7 +3,6 @@ import {
   Component,
   computed,
   input,
-  output,
 } from "@angular/core";
 import { StepComponent } from "../../../lib/process-engine/process.type";
 import { User } from "./user";
@@ -13,6 +12,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { map, switchMap } from "rxjs";
+import { outputFromObservable, toObservable } from "@angular/core/rxjs-interop";
 
 type UserForm = {
   [K in keyof User]: FormControl<User[K]>;
@@ -22,7 +23,7 @@ type UserForm = {
   selector: "app-user-create",
   imports: [ReactiveFormsModule],
   template: `
-    <form [formGroup]="userForm()" (ngSubmit)="submit(userForm())">
+    <form [formGroup]="userForm()">
       <div>
         <input
           type="text"
@@ -55,7 +56,6 @@ type UserForm = {
           required
         />
       </div>
-      <button type="submit">Submit</button>
     </form>
   `,
   styles: ``,
@@ -63,7 +63,22 @@ type UserForm = {
 })
 export class UserCreateComponent implements StepComponent<string, User> {
   public readonly input = input.required<string>();
-  public readonly output = output<User>();
+  public readonly output = outputFromObservable<User>(
+    toObservable(
+      computed(() =>
+        this.userForm().valueChanges.pipe(
+          map(() => this.mapFormToUser(this.userForm())),
+        ),
+      ),
+    ).pipe(switchMap((value) => value)),
+  );
+  public readonly valid = outputFromObservable(
+    toObservable(
+      computed(() =>
+        this.userForm().statusChanges.pipe(map((status) => status === "VALID")),
+      ),
+    ).pipe(switchMap((status) => status)),
+  );
 
   protected readonly userForm = computed(
     () =>
@@ -83,14 +98,6 @@ export class UserCreateComponent implements StepComponent<string, User> {
         email: new FormControl("", { nonNullable: true }),
       }),
   );
-
-  protected submit(form: FormGroup<UserForm>): void {
-    if (form.valid) {
-      this.output.emit(this.mapFormToUser(form));
-    } else {
-      form.markAllAsTouched();
-    }
-  }
 
   private mapFormToUser(form: FormGroup<UserForm>): User {
     return {

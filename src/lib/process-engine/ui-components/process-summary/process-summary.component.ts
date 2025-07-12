@@ -30,6 +30,7 @@ export class ProcessSummaryComponent<In extends object>
 {
   public readonly input = input.required<In>();
   public readonly output = output<In>();
+  public readonly valid = output<boolean>();
 
   protected readonly isSimpleValue = computed(() => {
     return typeof this.input() === "string" || typeof this.input() === "number";

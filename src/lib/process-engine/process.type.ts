@@ -1,4 +1,4 @@
-import { InputSignal, OutputEmitterRef, Type } from "@angular/core";
+import { InputSignal, OutputRef, Type } from "@angular/core";
 
 export type Process<In, Out> = [
   Step<In, unknown>,
@@ -14,5 +14,6 @@ export type Step<In, Out> = {
 
 export interface StepComponent<In, Out> {
   readonly input: InputSignal<In>;
-  readonly output: OutputEmitterRef<Out>;
+  readonly output: OutputRef<Out>;
+  readonly valid: OutputRef<boolean>;
 }

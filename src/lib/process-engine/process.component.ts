@@ -3,7 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  effect,
   inject,
+  Injector,
   input,
   inputBinding,
   output,
@@ -29,12 +31,14 @@ export class ProcessComponent<In, Out> implements AfterViewInit {
   public readonly result = output<Out>();
   private readonly processService = inject(ProcessService);
   private readonly destoryRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
   private readonly processContainer = viewChild.required("processContainer", {
     read: ViewContainerRef,
   });
 
   public currentStepIndex = 0;
   public currentStepOutput = signal<unknown>(null);
+  public currentStepValid = signal(false);
 
   ngAfterViewInit() {
     this.prechecks();
@@ -62,6 +66,17 @@ export class ProcessComponent<In, Out> implements AfterViewInit {
       .subscribe(() => {
         this.previous();
       });
+
+    effect(
+      () => {
+        this.processService.setNextButton({
+          disabled: !this.currentStepValid(),
+        });
+      },
+      {
+        injector: this.injector,
+      },
+    );
   }
 
   private next() {
@@ -99,6 +114,9 @@ export class ProcessComponent<In, Out> implements AfterViewInit {
         inputBinding("input", () => step.input),
         outputBinding("output", (stepOut: unknown) =>
           this.currentStepOutput.set(stepOut),
+        ),
+        outputBinding("valid", (isValid: boolean) =>
+          this.currentStepValid.set(isValid),
         ),
       ],
     });

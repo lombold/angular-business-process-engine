@@ -18,10 +18,10 @@ import { ProcessButtonComponent } from "../previous-step-component/process-butto
       <app-process [process]="process()" />
       <div class="flex flex-row justify-between">
         @if (processService.getPreviousButton() | async; as previousButton) {
-          <button appProcessButton [button]="previousButton" />
+          <button appProcessButton [button]="previousButton">asdf</button>
         }
         @if (processService.getNextButton() | async; as nextButton) {
-          <button appProcessButton [button]="nextButton" />
+          <button appProcessButton [button]="nextButton">asdf</button>
         }
       </div>
     </div>
