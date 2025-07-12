@@ -12,10 +12,14 @@ import { StepComponent } from "../../process.type";
   selector: "app-process-summary",
   imports: [],
   template: `
-    @for (pair of inputAsKeyValue(); track pair.key) {
-      <div>
-        <strong>{{ pair.key }}:</strong> {{ pair.value }}
-      </div>
+    @if (isSimpleValue()) {
+      {{ input() }}
+    } @else {
+      @for (pair of inputAsKeyValue(); track pair.key) {
+        <div>
+          <strong>{{ pair.key }}:</strong> {{ pair.value }}
+        </div>
+      }
     }
   `,
   styles: ``,
@@ -26,6 +30,10 @@ export class ProcessSummaryComponent<In extends object>
 {
   public readonly input = input.required<In>();
   public readonly output = output<In>();
+
+  protected readonly isSimpleValue = computed(() => {
+    return typeof this.input() === "string" || typeof this.input() === "number";
+  });
 
   protected readonly inputAsKeyValue = computed(() =>
     this.mapInputToKeyValue(this.input()),

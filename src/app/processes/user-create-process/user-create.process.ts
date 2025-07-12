@@ -4,6 +4,7 @@ import { SelectUsernameComponent } from "./select-username.component";
 
 export const createUserProcess = process(
   step(SelectUsernameComponent),
+  summary(),
   step(UserCreateComponent),
   summary(),
 );
