@@ -1,5 +1,6 @@
 import { Process, Step, StepComponent } from "./process.type";
 import { Type } from "@angular/core";
+import { ProcessSummaryComponent } from "./ui-components/process-summary/process-summary.component";
 
 export function process<In, Out, Steps extends Step<any, any>[]>(
   ...steps: Steps
@@ -7,11 +8,9 @@ export function process<In, Out, Steps extends Step<any, any>[]>(
   return steps as unknown as Process<In, Out>;
 }
 
-// export function process<In, Out, Steps extends Process<In, Out>>(
-//   ...steps: Steps
-// ): Steps {
-//   return steps;
-// }
+export function summary(): Step<object, object> {
+  return step(ProcessSummaryComponent);
+}
 
 export function step<In, Out>(
   component: Type<StepComponent<In, Out>>,

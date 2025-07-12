@@ -13,7 +13,6 @@ import {
   ViewContainerRef,
 } from "@angular/core";
 import { Process, Step } from "./process.type";
-import { UserCreateComponent } from "../../app/processes/user-create-process/user-create.component";
 import { ProcessService } from "./process.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
@@ -23,7 +22,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
   template: ` <div #processContainer></div> `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ProcessService],
 })
 export class ProcessComponent<In, Out> implements AfterViewInit {
   public readonly process = input.required<Process<In, Out>>();
@@ -96,7 +94,7 @@ export class ProcessComponent<In, Out> implements AfterViewInit {
       `Rendering step: ${step.component.name} at index ${this.currentStepIndex}`,
     );
     this.processContainer().clear();
-    this.processContainer()?.createComponent(UserCreateComponent, {
+    this.processContainer()?.createComponent(step.component, {
       bindings: [
         inputBinding("input", () => step.input),
         outputBinding("output", (stepOut: unknown) =>
