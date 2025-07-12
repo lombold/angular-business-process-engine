@@ -1,19 +1,28 @@
-import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from "@angular/core";
 import { Process } from "../../process.type";
 import { ProcessComponent } from "../../process.component";
-import { NextStepDirective } from "../../directives/next-step.directive";
-import { PreviousStepDirective } from "../../directives/previous-step.directive";
 import { ProcessService } from "../../process.service";
+import { AsyncPipe } from "@angular/common";
+import { ProcessButtonComponent } from "../previous-step-component/process-button.component";
 
 @Component({
   selector: "app-linear-process-container",
-  imports: [ProcessComponent, NextStepDirective, PreviousStepDirective],
+  imports: [ProcessComponent, AsyncPipe, ProcessButtonComponent],
   template: `
     <div class="fit-content flex flex-col gap-1">
       <app-process [process]="process()" />
       <div class="flex flex-row justify-between">
-        <button appPreviousStep type="button">Previous</button>
-        <button appNextStep type="button">Next</button>
+        @if (processService.getPreviousButton() | async; as previousButton) {
+          <button appProcessButton [button]="previousButton" />
+        }
+        @if (processService.getNextButton() | async; as nextButton) {
+          <button appProcessButton [button]="nextButton" />
+        }
       </div>
     </div>
   `,
@@ -23,4 +32,5 @@ import { ProcessService } from "../../process.service";
 })
 export class LinearProcessContainerComponent {
   public readonly process = input.required<Process<unknown, unknown>>();
+  protected readonly processService = inject(ProcessService);
 }
