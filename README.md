@@ -1,59 +1,70 @@
-# AngularBusinessPorcessEngine
+# Angular Business Process Engine
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.1.
+A modular Angular framework for building business processes as step-based workflows. This project enables you to
+compose, visualize, and manage multi-step user flows using Angular components and services.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Composable Processes:** Define business processes as ordered steps using Angular components.
+- **Step Navigation:** Built-in navigation (Next/Previous) and validation for each step.
+- **Extensible:** Easily add new process steps and UI components.
+- **Type-Safe:** Leverages TypeScript generics for input/output typing between steps.
 
-```bash
-ng serve
+## Architecture Overview
+
+```mermaid
+graph TD
+    A[Process Definition] -->|Composed of| B[Step Components]
+    B --> C[Process Service]
+    C --> D[UI Components]
+    D --> E[User Interaction]
+    B --> F[Validation]
+    C --> G[Navigation Logic]
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Process Definition:** Use the `process()` function to compose steps.
+- **Step Components:** Angular components implementing the `StepComponent<In, Out>` interface.
+- **Process Service:** Manages navigation and state between steps.
+- **UI Components:** Render the process and navigation buttons.
 
-## Code scaffolding
+## Example: Defining a Process
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+```typescript
+import {process, step, summary} from 'src/lib/process-engine/process';
+import {SelectUsernameComponent} from './select-username.component';
+import {UserCreateComponent} from './user-create.component';
 
-```bash
-ng generate component component-name
+export const userCreateProcess = process(
+    step(SelectUsernameComponent),
+    step(UserCreateComponent),
+    summary()
+);
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Getting Started
 
-```bash
-ng generate --help
-```
+1. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
+2. **Run the development server:**
+   ```bash
+   ng serve
+   ```
+   Visit [http://localhost:4200](http://localhost:4200) in your browser.
 
-## Building
+## Project Structure
 
-To build the project run:
+- `src/lib/process-engine/` – Core process engine logic and types
+- `src/app/processes/` – Example business processes and steps
+- `src/app/pages/` – Page components for routing
 
-```bash
-ng build
-```
+## Contributing
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Contributions are welcome! Please open issues or submit pull requests for improvements or new features.
 
-## Running unit tests
+## License
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT
